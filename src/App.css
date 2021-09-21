@@ -30,3 +30,12 @@ label {
   -webkit-border-radius: 50%;
   border-radius: 50%;
 }
+
+
+
+
+
+.jumbotron
+{
+  padding: 8px !important;
+}
