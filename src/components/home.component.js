@@ -17,11 +17,11 @@ export default class Home extends Component {
 
   render() {
     return (
-      <div className="container" style={{ marginTop: "20px" }}>
+      <div className="container" style={{ marginTop: "24px","max-width": "100%;" }}>
         <header className="jumbotron">
           <h4>{this.state.content}</h4>
         </header>
-        <div className="container-md" style={{ marginTop: "20px" }}>
+        <div className="container-md" style={{ marginTop: "40px" }}>
           <p>{"Favtar Wallet Favtar Wallet Favtar Wallet Favtar Wallet"}</p>
         </div>
       </div>

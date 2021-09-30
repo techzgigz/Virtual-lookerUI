@@ -3,7 +3,8 @@ import { Switch, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
-import AuthService from "./services/auth.service";
+import AuthService from "./services/auth.service1";
+import { useCookies } from 'react-cookie';
 
 import Login from "./components/login.component";
 import Register from "./components/register.component";
@@ -11,20 +12,24 @@ import Home from "./components/home.component";
 import Profile from "./components/profile.component";
 // import AuthVerify from "./common/auth-verify";
 import EventBus from "./common/EventBus";
-import Key from "./components/key.component";
-
+import { withCookies, Cookies } from 'react-cookie';
+var _this=null;
 class App extends Component {
+   
   constructor(props) {
     super(props);
     this.logOut = this.logOut.bind(this);
-
+    const { cookies } = props;
+    
     this.state = {
-      currentUser: false
+      currentUser: undefined,
+      name: cookies.get('name') || 'Ben'
     };
+    _this=this;
   }
 
   componentDidMount() {
-    const user = AuthService.getCurrentUser();
+    const user = null//AuthService.getCurrentUser();
 
     if (user) {
       this.setState({
@@ -49,22 +54,40 @@ class App extends Component {
       currentUser: undefined,
     });
   }
+  getCurrentUser() {
+    // console.log(_this.props)
+     const { cookies } = _this.props;
 
+   
+    console.log(cookies.get('dhs'))
+    cookies.set('dhss', "dhs", { path: '/', httpOnly: 'true' });
+    _this.setState({ name :"name"});
+    AuthService.getCurrentUser(cookies);
+     
+  }
+  postCurrentUser() {
+    AuthService.postCurrentUser();
+    // this.setState({
+    //   showModeratorBoard: false,
+    //   showAdminBoard: false,
+    //   currentUser: undefined,
+    // });
+  }
   render() {
     const { currentUser} = this.state;
 
     return (
-      <div className="container-fluid">
+      <div className="container">
         <nav className="navbar navbar-expand navbar-dark bg-light ">
-          <Link to={"/"} className="navbar-brand text-dark">
+          {/* <Link to={"/"} className="navbar-brand text-dark">
             FavAvtar
-          </Link>
+          </Link> */}
           <div className="navbar-nav mr-auto">
-            <li className="nav-item text-dark">
+            {/* <li className="nav-item text-dark">
               <Link to={"/home"} className="nav-link text-dark">
                 Home
               </Link>
-            </li>
+            </li> */}
  
 
             {currentUser && (
@@ -76,58 +99,41 @@ class App extends Component {
             )}
           </div>
 
-          {currentUser ? (
+          
             <div className="navbar-nav ml-auto">
               <li className="nav-item">
-                <Link to={"/profile"} className="nav-link text-dark">
-                  Profile
+                <Link to={"/"} onClick={this.getCurrentUser} className="nav-link text-dark">
+                  GET
                 </Link>
-              </li>
-              <li className="nav-item">
-                <Link to={"/key"} className="nav-link text-dark">
-                  Key
-                </Link>
-              </li>
-              <li className="nav-item">
-                <a href="/login" className="nav-link text-dark" onClick={this.logOut}>
-                  LogOut Wallet
-                </a>
-              </li>
-            </div>
-          ) : (
-            <div className="navbar-nav ml-auto">
-              <li className="nav-item">
-                <Link to={"/login"} className="nav-link text-dark">
-                  Login Wallet
+                <Link to={"/"} onClick={this.postCurrentUser} className="nav-link text-dark">
+                  POST
                 </Link>
               </li>
 
-              <li className="nav-item">
+              {/* <li className="nav-item">
                 <Link to={"/register"} className="nav-link text-dark">
                 Register Wallet
                 </Link>
-              </li>
+              </li> */}
             </div>
-          )}
+         
         </nav>
 
-        <div className="container" style={{margin:"0px",max-width: "100%"}}>
+        {/* <div className="container">
           <Switch>
             <Route exact path={["/", "/home"]} component={Home} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />
-            {currentUser && <>
             <Route exact path="/profile" component={Profile} />
-            <Route exact path="/key" component={Key} />
-            </>
-            }
           </Switch>
-        </div>
+        </div> */}
 
         { /*<AuthVerify logOut={this.logOut}/> */ }
+
+        
       </div>
     );
   }
 }
 
-export default App;
+export default withCookies(App);

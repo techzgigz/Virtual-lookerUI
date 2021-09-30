@@ -38,4 +38,11 @@ label {
 .jumbotron
 {
   padding: 8px !important;
+  width: 100% !important;
+}
+.word {
+  /* white-space: nowrap; */
+  overflow: scroll;
+  text-overflow: ellipsis;
+  word-break: break-all;
 }
