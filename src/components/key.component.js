@@ -39,7 +39,7 @@ export default class Key extends Component {
     componentDidMount() {
         ALLService.getKey().then(
             (key) => {
-                this.setState({ allKeys: key.data })
+                this.setState({ allKey: key.data })
                 //console.log(this.state.allKey.data)
             },
             error => {
@@ -56,12 +56,16 @@ export default class Key extends Component {
         });
 
         this.form.validateAll();
-
+       // console.log(this.state.secret)
         if (true) {
             ALLService.insertkey(this.state.secret).then(
                 (key) => {
                     //console.log(key.data)  // return key.json();
-                    this.setState({ key: key.data })
+                    // this.setState({ key: ru })
+                    this.setState({
+                        loading: false,
+                        message: "Done"
+                    });
                     //this.props.history.push("/profile");
                     //window.location.reload();
                 },
@@ -86,16 +90,17 @@ export default class Key extends Component {
 
             <div className="col-md-12" style={{ marginTop: "24px" }}>
 
-
-                <div class="container ">
-                    <h2>Yours keys</h2>
+                <h2>Keys</h2>
+                <hr />
+                <div class=" ">
+                    <h6>Secret Key</h6>
                     <p>Please dont share with any ones.</p>
                     <table class="table">
                         <thead>
                             <tr>
                                 <th>KeyID</th>
                                 <th>Public Key</th>
-                                <th>Private Key</th>
+                                {/* <th>Private Key</th> */}
                             </tr>
                         </thead>
                         <tbody>
@@ -103,9 +108,9 @@ export default class Key extends Component {
                                 return (
                                     <>
                                         <tr>
-                                            <td className="word">{index + 1}</td>
-                                            <td className="word">{item.public}</td>
-                                            <td>{item.private}</td>
+                                            <td className="word_">{index + 1}</td>
+                                            <td className="word_">{"Public Key ......"}</td>
+                                            {/* <td>{item.private}</td> */}
 
                                         </tr>
                                     </>
@@ -113,21 +118,21 @@ export default class Key extends Component {
 
                             })}
                             {this.state.allKey && this.state.allKey.length == 0 &&
-                            //  this.state.allKey.map((item, index) => {
+                                //  this.state.allKey.map((item, index) => {
                                 <tr>
-                                    <td colSpan="3" align="center">No Key</td>
+                                    <td colSpan="2" align="center">No Key</td>
 
                                 </tr>
-                            // })
+                                // })
                             }
                         </tbody>
                     </table>
                 </div>
 
 
-                {!this.state.key && this.state.allKey && this.state.allKey.length === 0 && <div className={"card card-container_"}>
+                {this.state.allKey && this.state.allKey && this.state.allKey.length > 0  && <div className={"card card-container_"}>
 
-                    <Form style={{align:"center"}}
+                    <Form style={{ align: "center" }}
                         onSubmit={this.handleSubmit}
                         ref={c => {
                             this.form = c;
@@ -136,7 +141,7 @@ export default class Key extends Component {
                         <div className="form-group">
                             <label htmlFor="username">Secret key</label>
                             <Input
-                                style={{width:"200px"}}
+                                style={{ width: "200px" }}
                                 type="text"
                                 className="form-control"
                                 name="username"
@@ -147,7 +152,7 @@ export default class Key extends Component {
                         </div>
 
                         <div className="form-group " >
-                            <button style={{width:"100px"}}
+                            <button style={{ width: "100px" }}
                                 className="btn btn-primary btn-block"
                                 disabled={this.state.loading}
                             >

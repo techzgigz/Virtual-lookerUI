@@ -1,13 +1,13 @@
 import axios from 'axios';
 import authHeader from './auth-header';
 
-const API_URL = 'http://localhost:8080/api/document/';
+const API_URL = 'http://localhost:5000/api/wallet/';
 const API_URL2 ="http://localhost:5000/api/key/"
 
 class ALLService {
-  insertkey(data)
+  insertkey(secret)
   {
-    return axios.post(API_URL2 + "insert", {  data }, { headers: authHeader() })
+    return axios.post(API_URL2 + "insert", {  secret }, { headers: authHeader() })
   }
 
   getKey(data) {
@@ -16,7 +16,8 @@ class ALLService {
 
   insertDocs(data)
   {
-    return axios.post(API_URL + "insert", {  data }, { headers: authHeader() })
+    
+    return axios.post(API_URL + "insert",  data , { headers: authHeader() })
   }
 
   getDocs(data) {

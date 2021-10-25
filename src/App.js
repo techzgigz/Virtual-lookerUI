@@ -12,6 +12,7 @@ import Profile from "./components/profile.component";
 // import AuthVerify from "./common/auth-verify";
 import EventBus from "./common/EventBus";
 import Key from "./components/key.component";
+import Wallet from "./components/document.component";
 
 class App extends Component {
   constructor(props) {
@@ -79,6 +80,11 @@ class App extends Component {
           {currentUser ? (
             <div className="navbar-nav ml-auto">
               <li className="nav-item">
+                <Link to={"/document"} className="nav-link text-dark">
+                  Virtual Docs
+                </Link>
+              </li>
+              <li className="nav-item">
                 <Link to={"/profile"} className="nav-link text-dark">
                   Profile
                 </Link>
@@ -111,7 +117,7 @@ class App extends Component {
           )}
         </nav>
 
-        <div className="container" style={{margin:"0px",max-width: "100%"}}>
+        <div className="container" style={{margin:"0px",'max-width': "100%"}}>
           <Switch>
             <Route exact path={["/", "/home"]} component={Home} />
             <Route exact path="/login" component={Login} />
@@ -119,6 +125,7 @@ class App extends Component {
             {currentUser && <>
             <Route exact path="/profile" component={Profile} />
             <Route exact path="/key" component={Key} />
+            <Route exact path="/document" component={Wallet} />
             </>
             }
           </Switch>

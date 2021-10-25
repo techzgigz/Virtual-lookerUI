@@ -14,14 +14,14 @@ const required = value => {
     }
 };
 
-export default class Key extends Component {
+export default class Wallet extends Component {
     constructor(props) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.onChangeSecret = this.onChangeSecret.bind(this);
 
         this.state = {
-            secret: "",
+            selectedFile: "",
             loading: false,
             message: "",
             key: null
@@ -30,11 +30,24 @@ export default class Key extends Component {
 
     onChangeSecret(e) {
         this.setState({
-            secret: e.target.value
+            selectedFile: e.target.files[0],
         });
     }
 
 
+
+
+    componentDidMount() {
+        // ALLService.getWallet().then(
+        //     (key) => {
+        //         this.setState({ allKey: key.data })
+        //         //console.log(this.state.allKey.data)
+        //     },
+        //     error => {
+        //         this.setState({ allKey: [] })
+        //     }
+        // )
+    }
 
     handleSubmit(e) {
         e.preventDefault();
@@ -44,13 +57,21 @@ export default class Key extends Component {
             loading: true
         });
 
-        this.form.validateAll();
+        let valid=this.form.validateAll();
+        //alert(valid)
+        if (!valid) {
+            const userkey =localStorage.getItem('user') ?JSON.parse(localStorage.getItem('user')):{};
 
-        if (true) {
-            ALLService.insertkey(this.state.secret).then(
+            const data = new FormData() 
+            data.append('file', this.state.selectedFile)
+            data.append('publicKey', userkey.key)
+            ALLService.insertDocs(data).then(
                 (key) => {
                     //console.log(key.data)  // return key.json();
-                    this.setState({ key: key.data })
+                    this.setState({
+                        loading: false,
+                        message: "Done"
+                    });
                     //this.props.history.push("/profile");
                     //window.location.reload();
                 },
@@ -72,8 +93,10 @@ export default class Key extends Component {
 
     render() {
         return (
-            <div className="col-md-12">
-              {!this.state.key &&  <div className={"card card-container"}>
+            <div className="col-md-12" style={{ marginTop: "24px" }}>
+                <h2>Wallet</h2>
+                <hr />
+               <div className={""}>
                    
                      <Form
                         onSubmit={this.handleSubmit}
@@ -82,19 +105,21 @@ export default class Key extends Component {
                         }}
                     >
                         <div className="form-group">
-                            <label htmlFor="username">Secret key</label>
-                            <Input
+                            <label htmlFor="username">File</label>
+                            <input type="file" name="file" onChange={this.onChangeSecret}  validations={[required]}/>
+
+                            {/* <Input
                                 type="text"
                                 className="form-control"
                                 name="username"
                                 value={this.state.secret}
                                 onChange={this.onChangeSecret}
                                 validations={[required]}
-                            />
+                            /> */}
                         </div>
 
                         <div className="form-group">
-                            <button
+                            <button style={{ width: "100px" }}
                                 className="btn btn-primary btn-block"
                                 disabled={this.state.loading}
                             >
@@ -113,23 +138,11 @@ export default class Key extends Component {
                             </div>
                         )}
 
-                    </Form>}
+                    </Form>
 
                 </div>
-               } {this.state.key &&<div className={"card "}>
-                   
-                        <><p>
-                            <strong>Public:</strong>{" "}
-                            {this.state.key.public}
-                        </p>
-                            <p>
-                                <strong>Private:</strong>{" "}
-                                {this.state.key.private}
-                            </p>
-                        </>
-
-                </div> }
-            </div>
+             
+               </div>
         );
     }
 }

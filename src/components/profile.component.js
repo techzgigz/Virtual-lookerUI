@@ -28,20 +28,24 @@ export default class Profile extends Component {
     const { currentUser } = this.state;
 
     return (
-      <div className="container">
+      <div className="" style={{ marginTop: "24px"}}>
         {(this.state.userReady) ?
         <div>
-        <header className="jumbotron">
-          <h3>
-            <strong>{currentUser.username}</strong> Profile
-          </h3>
-        </header>
-        <p>
+           <h2>Profile</h2>
+           <hr/>
+           {/* <h5>
+            <strong>Profile</strong> 
+          </h5> */}
+        {/* <p>
           <strong>Tologinken:</strong>{" "}
           {currentUser.accessToken.substring(0, 20)} ...{" "}
           {currentUser.accessToken.substr(currentUser.accessToken.length - 20)}
-        </p>
+        </p> */}
         <p>
+          <strong>Username:</strong>{" "}
+          {currentUser.username}
+        </p>
+         <p>
           <strong>Id:</strong>{" "}
           {currentUser.id}
         </p>
